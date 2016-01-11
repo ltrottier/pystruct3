@@ -4,7 +4,7 @@
 
 """
 __author__ = "Ludovic Trottier"
-__license__ = "GPL"
+__license__ = "MIT"
 __date__ = "Sun Jan 10 12:47:32 2016"
 
 
