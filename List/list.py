@@ -47,6 +47,12 @@ class List(object):
         self._size = 0
         self._head = None
 
+    def __del__(self):
+        """Destroy the list.
+        """
+        while self.size() > 0:
+            self.remove(0)
+
     def insert(self, item, index):
         """Insert an item at a certain index.
 
@@ -232,6 +238,14 @@ class List(object):
     def __contains__(self, item):
         return self.contains(item)
 
+    def __add__(self, other_list):
+        new_list = self.__class__()
+        for item in self:
+            new_list.append(item)
+        for item in other_list:
+            new_list.append(item)
+        return new_list
+
     def __iter__(self):
         return ForwardIterator(self._head)
 
@@ -283,16 +297,16 @@ class SingleLinkedList(List):
     Attributs (public):
         Nothing.
     """
-    class Node:
+    class _Node:
         """Node class for linked list.
 
         Args:
             item (object): Item contained in the node.
-            next_node (Node): Pointer to neighbor node.
+            next_node (_Node): Pointer to neighbor node.
 
         Attributes (public):
             item (object): Item contained in the node.
-            next_node (Node): Pointer to neighbor node.
+            next_node (_Node): Pointer to neighbor node.
         """
         def __init__(self, item, next_node=None):
             self.item = item
@@ -309,17 +323,17 @@ class SingleLinkedList(List):
             raise ValueError('Argument index must be lower than or equal to the list size.')
 
         if self.is_empty():
-            self._head = SingleLinkedList.Node(item)
+            self._head = SingleLinkedList._Node(item)
         else:
             sentinel = self._head
             if index == 0:
-                newNode = SingleLinkedList.Node(item, self._head)
+                newNode = SingleLinkedList._Node(item, self._head)
                 self._head = newNode
             else:
                 for i in range(index-1):
                     sentinel = sentinel.next_node
 
-                newNode = SingleLinkedList.Node(item, sentinel.next_node)
+                newNode = SingleLinkedList._Node(item, sentinel.next_node)
                 sentinel.next_node = newNode
 
         self._size = self._size + 1
@@ -385,7 +399,6 @@ class SingleLinkedList(List):
             sentinel = sentinel.next_node
 
         sentinel.item = item
-
 
 class DoubleLinkedList(List):
 
