@@ -51,7 +51,7 @@ class List(object):
         """Destroy the list.
         """
         while self.size() > 0:
-            self.remove(0)
+            self.pop(0)
 
     def insert(self, item, index):
         """Insert an item at a certain index.
@@ -73,18 +73,33 @@ class List(object):
         """
         raise NotImplementedError
 
-    def remove(self, index):
-        """Remove the item at a certain position.
+    def remove(self, item):
+        """Remove an item of the list.
+
+        Args:
+            item (object): The item to remove.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            ValueError: An error occurs when item is not in the list.
+        """
+        raise NotImplementedError
+
+    def pop(self, index=None):
+        """Remove the item at a certain index and returns it.
 
         The item at position index will be removed. All items that were
         formally positioned at index+1, index+2, index+3, ... will be
         positioned at index, index+1, index+2, ...
 
         Args:
-            index (int): The index in the list.
+            index (Optional[int]): The index in the list. If not provided,
+                                   pop the last item.
 
         Returns:
-            Nothing.
+            object: The item at the given index.
 
         Raises:
             ValueError: An error occurs if index is out of range, i.e. if
@@ -193,19 +208,6 @@ class List(object):
         """
         self.insert(item, self.size())
 
-    def pop(self):
-        """Remove last item of the list.
-
-        Args:
-            Nothing.
-
-        Returns:
-            Nothing.
-
-        Raises:
-            ValueError: An error occurs when the list is empty.
-        """
-        self.remove(self.size() - 1)
 
     def is_empty(self):
         """Verify if the list is empty.
@@ -233,7 +235,7 @@ class List(object):
         self.write(item, index)
 
     def __delitem__(self, index):
-        self.remove(index)
+        self.pop(index)
 
     def __contains__(self, item):
         return self.contains(item)
@@ -312,6 +314,11 @@ class SingleLinkedList(List):
             self.item = item
             self.next_node = next_node
 
+        def __del__(self):
+            # print('deleted', self.item, self.next_node)
+            self.item = None
+            self.next_node = None
+
     def __init__(self):
         List.__init__(self)
 
@@ -338,28 +345,47 @@ class SingleLinkedList(List):
 
         self._size = self._size + 1
 
-    def remove(self, index):
+    def remove(self, item):
+        if self.is_empty():
+            raise ValueError('Item not found.')
+
+        if self._head.item == item:
+            self._head = self._head.next_node
+        else:
+            previous = self._head
+            sentinel = self._head.next_node
+            if sentinel is None:
+                raise ValueError('Item not found.')
+            while sentinel.item != item:
+                previous = sentinel
+                sentinel = sentinel.next_node
+                if sentinel is None:
+                    raise ValueError('Item not found.')
+
+            previous.next_node = sentinel.next_node
+
+        self._size = self._size - 1
+
+    def pop(self, index=None):
+        if index is None:
+            index = self.size() - 1
         if index < 0:
             raise ValueError('Argument index must be positive.')
-
         if index >= self.size():
             raise ValueError('Argument index must be lower than the list size.')
 
         if index == 0:
-            temp = self._head
+            item = self._head.item
             self._head = self._head.next_node
-            temp.next_node = None
-            temp = None
         else:
             sentinel = self._head
             for i in range(index-1):
                 sentinel = sentinel.next_node
-            temp = sentinel.next_node
+            item = sentinel.next_node.item
             sentinel.next_node = sentinel.next_node.next_node
-            temp.next_node = None
-            temp = None
 
         self._size = self._size - 1
+        return item
 
     def read(self, index):
         if index < 0:
