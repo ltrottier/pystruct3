@@ -24,58 +24,105 @@
 # SOFTWARE.
 
 import unittest
+import random
 
-class TestStringMethods(unittest.TestCase):
+class TestListMethods(unittest.TestCase):
 
-    def test_is_empty(self):
-        l = List()
-        self.assertEqual(l.size(), 0)
-        self.assertTrue(l.is_empty())
+    def setUp(self):
+        self.empty_list = List()
 
-    def test_insertRaises(self):
-        l = List()
+        self.unit_list = List()
+        self.unit_list.append(4)
+
+        # [3, 1, 2]
+        self.some_list = List()
+        self.some_list.insert(1, 0)
+        self.some_list.insert(2, 1)
+        self.some_list.insert(3, 0)
+
+    def test_read_ok(self):
+        self.assertEqual(self.some_list.read(0), 3)
+        self.assertEqual(self.some_list[0], 3)
+        self.assertEqual(self.some_list.read(1), 1)
+        self.assertEqual(self.some_list[1], 1)
+        self.assertEqual(self.some_list.read(2), 2)
+        self.assertEqual(self.some_list[2], 2)
+
+    def test_read_raises(self):
         with self.assertRaises(ValueError):
-            l.insert(1, -1)
-
+            self.empty_list.read(-1)
         with self.assertRaises(ValueError):
-            l.insert(1, 1)
-
-    def test_insertOk(self):
-        l = List()
-        l.insert(1, 0)
-        l.insert(2, 1)
-        l.insert(3, 0)
-        self.assertEqual(3, l[0])
-        self.assertEqual(1, l[1])
-        self.assertEqual(2, l[2])
-
-    def test_removeRaises(self):
-        l = List()
+            self.empty_list.read(0)
         with self.assertRaises(ValueError):
-            l.remove(0)
-
-        l.insert(1, 0)
-        l.insert(2, 1)
-        l.insert(3, 0)
+            self.some_list.read(4)
         with self.assertRaises(ValueError):
-            l.remove(-1)
-        with self.assertRaises(ValueError):
-            l.remove(3)
+            self.some_list.read(-1)
 
-    def test_removeOk(self):
-        l = List()
-        l.insert(1, 0)
-        l.insert(2, 1)
-        l.insert(3, 0)
-        l.remove(0)
-        self.assertEqual(1, l[0])
-        self.assertEqual(2, l[1])
-        self.assertEqual(2, l.size())
-        l.remove(1)
-        self.assertEqual(1, l[0])
-        self.assertEqual(1, l.size())
-        l.remove(0)
-        self.assertEqual(0, l.size())
+    def test_contains_ok(self):
+        self.assertTrue(1 in self.some_list)
+        self.assertTrue(self.some_list.contains(1))
+        self.assertTrue(2 in self.some_list)
+        self.assertTrue(self.some_list.contains(2))
+        self.assertTrue(3 in self.some_list)
+        self.assertTrue(self.some_list.contains(3))
+
+        self.assertFalse(1 in self.empty_list)
+        self.assertFalse(self.empty_list.contains(1))
+        self.assertFalse(0 in self.some_list)
+        self.assertFalse(self.some_list.contains(0))
+        self.assertFalse(4 in self.some_list)
+        self.assertFalse(self.some_list.contains(4))
+
+    def test_insert_raises(self):
+        with self.assertRaises(ValueError):
+            self.empty_list.insert(1, -1)
+        with self.assertRaises(ValueError):
+            self.empty_list.insert(1, 1)
+        with self.assertRaises(ValueError):
+            self.some_list.insert(-1, 4)
+
+    def test_insert_ok(self):
+        a_list = List()
+        a_list.append(1)
+        a_list.append(1)
+        a_list.append(1)
+        self.assertEqual(1, a_list[0])
+        self.assertEqual(1, a_list[1])
+        self.assertEqual(1, a_list[2])
+
+    def test_pop_raises(self):
+        with self.assertRaises(ValueError):
+            self.empty_list.pop(0)
+        with self.assertRaises(ValueError):
+            self.some_list.pop(-1)
+        with self.assertRaises(ValueError):
+            self.some_list.pop(3)
+
+    def test_pop_ok(self):
+        self.some_list.pop(0)
+        self.assertEqual(1, self.some_list[0])
+        self.assertEqual(2, self.some_list[1])
+        self.assertEqual(2, self.some_list.size())
+        self.some_list.pop(1)
+        self.assertEqual(1, self.some_list[0])
+        self.assertEqual(1, self.some_list.size())
+        self.some_list.pop(0)
+        self.assertEqual(0, self.some_list.size())
+
+    def test_random_insert_remove(self):
+        a_list = List()
+        for i in range(10000):
+             item = random.randint(-100,100)
+             pos = random.randint(0, len(a_list))
+             if item not in a_list:
+                 a_list.insert(item,pos)
+             else:
+                 a_list.remove(item)
+
+    def test_is_empty_ok(self):
+        self.assertEqual(self.empty_list.size(), 0)
+        self.assertTrue(self.empty_list.is_empty())
+        self.assertFalse(self.some_list.is_empty())
 
     def test_indexRaises(self):
         l = List()
@@ -89,7 +136,6 @@ class TestStringMethods(unittest.TestCase):
         with self.assertRaises(ValueError):
             l.index(-3)
 
-
     def test_indexOk(self):
         l = List()
         l.insert(1, 0)
@@ -102,7 +148,7 @@ class TestStringMethods(unittest.TestCase):
 
 if __name__ == '__main__':
     from list import SingleLinkedList as List
-    unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestStringMethods))
+    unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
 
     #from List import DoubleLinkedList as List
-    #unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestStringMethods))
+    #unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
