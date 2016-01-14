@@ -69,7 +69,7 @@ class List(object):
 
         Raises:
             ValueError: An error occurs if index is out of range, i.e.
-                        if index < 0 or if index > list size.
+                        if index < -1 * list size or if index > list size.
         """
         raise NotImplementedError
 
@@ -102,8 +102,8 @@ class List(object):
             object: The item at the given index.
 
         Raises:
-            ValueError: An error occurs if index is out of range, i.e. if
-                        index < 0 or if index >= list size.
+            ValueError: An error occurs if index is out of range, i.e.
+                        if index < -1 * list size or if index > list size.
         """
         raise NotImplementedError
 
@@ -119,8 +119,8 @@ class List(object):
             object: The item at position index.
 
         Raises:
-            ValueError: An error occurs if index is out of range, i.e. if
-                        index < 0 or if index >= list size.
+            ValueError: An error occurs if index is out of range, i.e.
+                        if index < -1 * list size or if index >= list size.
         """
         raise NotImplementedError
 
@@ -153,8 +153,8 @@ class List(object):
             Nothing.
 
         Raises:
-            ValueError: An error occurs if index is out of range, i.e. if
-                        index < 0 or if index >= list size.
+            ValueError: An error occurs if index is out of range, i.e.
+                        if index < -1 * list size or if index >= list size.
         """
         raise NotImplementedError
 
@@ -248,6 +248,16 @@ class List(object):
             new_list.append(item)
         return new_list
 
+    def __eq__(self, other_list):
+        if self.size() != other_list.size():
+            return False
+
+        for item1,item2 in zip(self,other_list):
+            if item1 != item2:
+                return False
+
+        return True
+
     def __iter__(self):
         return ForwardIterator(self._head)
 
@@ -323,24 +333,24 @@ class SingleLinkedList(List):
         List.__init__(self)
 
     def insert(self, item, index):
-        if index < 0:
-            raise ValueError('Argument index must be positive.')
+        if (index < -self.size()) or (index > self.size()):
+            raise ValueError('Argument index out of range.')
 
-        if index > self.size():
-            raise ValueError('Argument index must be lower than or equal to the list size.')
+        if index < 0:
+            index = self.size() + index
 
         if self.is_empty():
-            self._head = SingleLinkedList._Node(item)
+            self._head = self._Node(item)
         else:
             sentinel = self._head
             if index == 0:
-                newNode = SingleLinkedList._Node(item, self._head)
+                newNode = self._Node(item, self._head)
                 self._head = newNode
             else:
                 for i in range(index-1):
                     sentinel = sentinel.next_node
 
-                newNode = SingleLinkedList._Node(item, sentinel.next_node)
+                newNode = self._Node(item, sentinel.next_node)
                 sentinel.next_node = newNode
 
         self._size = self._size + 1
@@ -369,10 +379,12 @@ class SingleLinkedList(List):
     def pop(self, index=None):
         if index is None:
             index = self.size() - 1
+
+        if (index < -self.size()) or (index >= self.size()):
+            raise ValueError('Argument index out of range.')
+
         if index < 0:
-            raise ValueError('Argument index must be positive.')
-        if index >= self.size():
-            raise ValueError('Argument index must be lower than the list size.')
+            index = self.size() + index
 
         if index == 0:
             item = self._head.item
@@ -388,11 +400,11 @@ class SingleLinkedList(List):
         return item
 
     def read(self, index):
-        if index < 0:
-            raise ValueError('Argument index must be positive.')
+        if (index < -self.size()) or (index >= self.size()):
+            raise ValueError('Argument index out of range.')
 
-        if index >= self.size():
-            raise ValueError('Argument index must be lower than the list size.')
+        if index < 0:
+            index = self.size() + index
 
         sentinel = self._head
         for i in range(index):
@@ -414,11 +426,11 @@ class SingleLinkedList(List):
         return i
 
     def write(self, item, index):
-        if index < 0:
-            raise ValueError('Argument index must be positive.')
+        if (index < -self.size()) or (index >= self.size()):
+            raise ValueError('Argument index out of range.')
 
-        if index >= self.size():
-            raise ValueError('Argument index must be lower than the list size.')
+        if index < 0:
+            index = self.size() + index
 
         sentinel = self._head
         for i in range(index):
