@@ -45,7 +45,6 @@ class List(object):
         """Create an empty list.
         """
         self._size = 0
-        self._head = None
 
     def __del__(self):
         """Destroy the list.
@@ -258,9 +257,6 @@ class List(object):
 
         return True
 
-    def __iter__(self):
-        return ForwardIterator(self._head)
-
     def __repr__(self):
         items = ['[']
         for item in self:
@@ -270,32 +266,6 @@ class List(object):
             del items[-1]
         items.append(']')
         return ''.join(items)
-
-
-class ForwardIterator:
-    """Iterator for the List data structure.
-
-    Args:
-        node (Node): A linked list node.
-
-    Attributs (public):
-        node (Node): A linked list node.
-    """
-
-    def __init__(self, node):
-        self.node = node
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.node is None:
-            raise StopIteration
-
-        item = self.node.item
-        self.node = self.node.next_node
-
-        return item
 
 
 class SingleLinkedList(List):
@@ -329,8 +299,37 @@ class SingleLinkedList(List):
             self.item = None
             self.next_node = None
 
+    class _ForwardIterator:
+        """Iterator for SingleLinkedList.
+
+        Args:
+            node (Node): A linked list node.
+
+        Attributs (public):
+            node (Node): A linked list node.
+        """
+
+        def __init__(self, node):
+            self.node = node
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.node is None:
+                raise StopIteration
+
+            item = self.node.item
+            self.node = self.node.next_node
+
+            return item
+
     def __init__(self):
         List.__init__(self)
+        self._head = None
+
+    def __iter__(self):
+        return self._ForwardIterator(self._head)
 
     def insert(self, item, index):
         if (index < -self.size()) or (index > self.size()):
@@ -438,6 +437,7 @@ class SingleLinkedList(List):
 
         sentinel.item = item
 
+
 class DoubleLinkedList(List):
     """Double linked list data structure.
 
@@ -474,9 +474,38 @@ class DoubleLinkedList(List):
             self.next_node = None
             self.prev_node = None
 
+    class _ForwardIterator:
+        """Iterator for DoubleLinkedList.
+
+        Args:
+            node (Node): A linked list node.
+
+        Attributs (public):
+            node (Node): A linked list node.
+        """
+
+        def __init__(self, node):
+            self.node = node
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.node is None:
+                raise StopIteration
+
+            item = self.node.item
+            self.node = self.node.next_node
+
+            return item
+
     def __init__(self):
         List.__init__(self)
+        self._head = None
         self._tail = None
+
+    def __iter__(self):
+        return self._ForwardIterator(self._head)
 
     def insert(self, item, index):
         if (index < -self.size()) or (index > self.size()):
@@ -627,3 +656,7 @@ class DoubleLinkedList(List):
                 sentinel = sentinel.prev_node
 
         sentinel.item = item
+
+
+class ArrayList(List):
+    pass
