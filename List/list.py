@@ -439,21 +439,191 @@ class SingleLinkedList(List):
         sentinel.item = item
 
 class DoubleLinkedList(List):
+    """Double linked list data structure.
 
-    class Node:
+    Linked list where a node contains a pointer to its adjacent neighbors
+    (previous and next ones).
 
-        def __init__(self, item, next_node):
+    Args:
+        Nothing.
+
+    Attributs (public):
+        Nothing.
+    """
+    class _Node:
+        """Node class for linked list.
+
+        Args:
+            item (object): Item contained in the node.
+            next_node (_Node): Pointer to next neighbor node.
+            prev_node (_Node): Pointer to previous neighbor node.
+
+        Attributes (public):
+            item (object): Item contained in the node.
+            next_node (_Node): Pointer to next neighbor node.
+            prev_node (_Node): Pointer to previous neighbo node.
+        """
+        def __init__(self, item, next_node=None, prev_node=None):
             self.item = item
             self.next_node = next_node
+            self.prev_node = prev_node
+
+        def __del__(self):
+            # print('deleted', self.item, self.next_node)
+            self.item = None
+            self.next_node = None
+            self.prev_node = None
 
     def __init__(self):
         List.__init__(self)
+        self._tail = None
 
     def insert(self, item, index):
-        print('dll')
+        if (index < -self.size()) or (index > self.size()):
+            raise ValueError('Argument index out of range.')
+
         if index < 0:
-            raise ValueError('Argument index must be positive.')
+            index = self.size() + index
 
-        if index > self.size():
-            raise ValueError('Argument index must be lower than the list size.')
+        if self.is_empty():
+            self._head = self._Node(item)
+            self._tail = self._head
+        else:
+            if index == 0:
+                new_node = self._Node(item, self._head)
+                self._head.prev_node = new_node
+                self._head = new_node
+            elif index == self.size():
+                new_node = self._Node(item, None, self._tail)
+                self._tail.next_node = new_node
+                self._tail = new_node
+            else:
+               if index < self.size() / 2:
+                   sentinel = self._head
+                   for i in range(index):
+                       sentinel = sentinel.next_node
+               else:
+                   sentinel = self._tail
+                   for i in range(self.size() - 1, index, -1):
+                       sentinel = sentinel.prev_node
 
+               new_node = self._Node(item, sentinel, sentinel.prev_node)
+               sentinel.prev_node.next_node = new_node
+               sentinel.prev_node = new_node
+
+        self._size = self._size + 1
+
+    def remove(self, item):
+        if self.is_empty():
+            raise ValueError('Item not found.')
+
+        sentinel = self._head
+        while sentinel.item != item:
+            sentinel = sentinel.next_node
+            if sentinel is None:
+                raise ValueError('Item not found.')
+
+        if self.size() == 1:
+            self._head = None
+            self._tail = None
+        elif sentinel is self._head:
+            self._head.next_node.prev_node = None
+            self._head = self._head.next_node
+        elif sentinel is self._tail:
+            self._tail.prev_node.next_node = None
+            self._tail = self._tail.prev_node
+        else:
+            sentinel.prev_node.next_node = sentinel.next_node
+            sentinel.next_node.prev_node = sentinel.prev_node
+
+        self._size = self._size - 1
+
+    def pop(self, index=None):
+        if index is None:
+            index = self.size() - 1
+
+        if (index < -self.size()) or (index >= self.size()):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self.size() + index
+
+        if self.size() == 1:
+            item = self._head.item
+            self._head = None
+            self._tail = None
+        else:
+            if index == 0:
+                item = self._head.item
+                self._head.next_node.prev_node = None
+                self._head = self._head.next_node
+            elif index == self.size() - 1:
+                item = self._tail.item
+                self._tail.prev_node.next_node = None
+                self._tail = self._tail.prev_node
+            else:
+               if index < self.size() / 2:
+                   sentinel = self._head
+                   for i in range(index):
+                       sentinel = sentinel.next_node
+               else:
+                   sentinel = self._tail
+                   for i in range(self.size() - 1, index, -1):
+                       sentinel = sentinel.prev_node
+
+               sentinel.next_node.prev_node = sentinel.prev_node
+               sentinel.prev_node.next_node = sentinel.next_node
+               item = sentinel.item
+
+        self._size = self._size - 1
+
+        return item
+
+    def read(self, index):
+        if (index < -self.size()) or (index >= self.size()):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self.size() + index
+
+        if index < self.size() / 2:
+            sentinel = self._head
+            for i in range(index):
+                sentinel = sentinel.next_node
+        else:
+            sentinel = self._tail
+            for i in range(self.size() - 1, index, -1):
+                sentinel = sentinel.prev_node
+
+        return sentinel.item
+
+    def index(self, item):
+        sentinel = self._head
+        if self.is_empty():
+            raise ValueError('Item not found.')
+        i = 0
+        while sentinel.item != item:
+            sentinel = sentinel.next_node
+            i = i + 1
+            if sentinel is None:
+                raise ValueError('Item not found.')
+
+        return i
+
+    def write(self, item, index):
+        if (index < -self.size()) or (index >= self.size()):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self.size() + index
+
+        if index < self.size() / 2:
+            sentinel = self._head
+            for i in range(index):
+                sentinel = sentinel.next_node
+        else:
+            sentinel = self._tail
+            for i in range(self.size() - 1, index, -1):
+                sentinel = sentinel.prev_node
+
+        sentinel.item = item
