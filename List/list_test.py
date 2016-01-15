@@ -390,5 +390,5 @@ if __name__ == '__main__':
     from list import SingleLinkedList as List
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
 
-    #from List import DoubleLinkedList as List
-    #unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
+    from list import DoubleLinkedList as List
+    unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
