@@ -658,5 +658,13 @@ class DoubleLinkedList(List):
         sentinel.item = item
 
 
+class CircularSingleLinkedList(List):
+    pass
+
+
+class CircularDoubleLinkedList(List):
+    pass
+
+
 class ArrayList(List):
     pass
