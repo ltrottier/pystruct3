@@ -224,6 +224,23 @@ class List(object):
         """
         return self._size == 0
 
+    def copy(self):
+        """Deep copy of the list
+
+        Args:
+            Nothing.
+
+        Returns:
+            List: A deep copy of the list
+
+        Raises:
+            Nothing.
+        """
+        copy_list = self.__class__()
+        for item in self:
+            copy_list.append(item)
+        return copy_list
+
     def __len__(self):
         return self._size
 
