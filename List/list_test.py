@@ -386,6 +386,22 @@ class TestListMethods(unittest.TestCase):
             self.assertTrue(q != m)
             self.assertFalse(q is m)
 
+    def test_slice_read_ok(self):
+        pass
+
+    def test_slice_write_ok(self):
+        pass
+
+    def test_slice_del_ok(self):
+        pass
+
+    def test_deep_copy(self):
+        l = self.some_list.copy()
+        self.assertFalse(l is self.some_list)
+        self.assertTrue(l == self.some_list)
+        l[0] = 123
+        self.assertFalse(l == self.some_list)
+
 if __name__ == '__main__':
     from list import SingleLinkedList as List
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
