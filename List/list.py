@@ -228,13 +228,29 @@ class List(object):
         return self._size
 
     def __getitem__(self, index):
-        return self.read(index)
+        if isinstance(index, slice):
+            sliced_list = self.__class__()
+            for i in range(index.start, index.stop, index.step or 1):
+                sliced_list.append(self.read(i))
+            return sliced_list
+        else:
+            return self.read(index)
 
     def __setitem__(self, index, item):
-        self.write(item, index)
+        if isinstance(index, slice):
+            for i in range(index.start, index.stop, index.step or 1):
+                self.write(item[i], i)
+        else:
+            self.write(item, index)
 
     def __delitem__(self, index):
-        self.pop(index)
+        if isinstance(index, slice):
+            decrement = 0
+            for i in range(index.start, index.stop, index.step or 1):
+                self.pop(i - decrement)
+                decrement = decrement + 1
+        else:
+            self.pop(index)
 
     def __contains__(self, item):
         return self.contains(item)
