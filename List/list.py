@@ -225,7 +225,7 @@ class List(object):
         return self._size == 0
 
     def copy(self):
-        """Deep copy of the list
+        """Deep copy of the list.
 
         Args:
             Nothing.
@@ -312,7 +312,7 @@ class SingleLinkedList(List):
     Attributs (public):
         Nothing.
     """
-    class _Node:
+    class _Node(object):
         """Node class for linked list.
 
         Args:
@@ -332,7 +332,7 @@ class SingleLinkedList(List):
             self.item = None
             self.next_node = None
 
-    class _ForwardIterator:
+    class _ForwardIterator(object):
         """Iterator for SingleLinkedList.
 
         Args:
@@ -483,7 +483,8 @@ class DoubleLinkedList(List):
     Attributs (public):
         Nothing.
     """
-    class _Node:
+
+    class _Node(object):
         """Node class for linked list.
 
         Args:
@@ -507,7 +508,7 @@ class DoubleLinkedList(List):
             self.next_node = None
             self.prev_node = None
 
-    class _ForwardIterator:
+    class _ForwardIterator(object):
         """Iterator for DoubleLinkedList.
 
         Args:
@@ -700,4 +701,80 @@ class CircularDoubleLinkedList(List):
 
 
 class ArrayList(List):
-    pass
+    """Array list data structure.
+
+
+
+    Args:
+        Nothing.
+
+    Attributs (public):
+        Nothing.
+    """
+
+    class _ForwardIterator(object):
+        """Iterator for ArrayList.
+
+        Args:
+            array (python list): Container of ArrayList
+            head (int): Begining of the ArrayList
+            tail (int): End of the ArrayList
+
+        Attributs (public):
+            array (python list): Container of ArrayList
+            head (int): Begining of the ArrayList
+            tail (int): End of the ArrayList
+        """
+
+        def __init__(self, array, head, tail):
+            self.array = array
+            self.head = head
+            self.tail = tail
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.head == self.tail:
+                raise(StopIteration)
+            item = self.array[self.head]
+            self.head = (self.head + 1) % len(self.array)
+            return item
+
+    def __init__(self, capacity=2):
+        self._capacity = capacity
+        self._array = [None] * self._capacity
+        self._head = 0
+        self._tail = 0
+
+    def __iter__(self):
+        return self._ForwardIterator()
+
+    def _resize(self):
+        self.capacity = self.capacity * 2
+        new_array = [None] * self.capacity
+        i = self._head
+        pos = 0
+        while i != self._tail:
+            new_array[pos] = self._array[i]
+            self._array[i] = None
+            i = (i + 1) % self.size()
+        self._head = 0
+        self._tail = self.size()
+        self._array = new_array
+
+    def insert(self, item, index):
+        if (index < -self.size()) or (index > self.size()):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self.size() + index
+
+        if self.size() + 1 == self.capacity:
+            self._resize()
+
+
+
+
+
+
