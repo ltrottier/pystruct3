@@ -387,13 +387,28 @@ class TestListMethods(unittest.TestCase):
             self.assertFalse(q is m)
 
     def test_slice_read_ok(self):
-        pass
+        a = List()
+        a.append(3)
+        a.append(5)
+        a.append(4)
+        a.append(2)
+        b = List()
+        b.append(3)
+        b.append(5)
+        self.assertEqual(a[0:2], b)
 
     def test_slice_write_ok(self):
-        pass
+        a = List()
+        a.append(7)
+        a.append(5)
+        self.some_list[0:2] = a
+        self.assertEqual(self.some_list[0], 7)
+        self.assertEqual(self.some_list[1], 5)
 
     def test_slice_del_ok(self):
-        pass
+        del self.some_list[0:2]
+        self.assertEqual(self.some_list[0],2)
+        self.assertEqual(self.some_list.size(), 1)
 
     def test_deep_copy(self):
         l = self.some_list.copy()
@@ -407,4 +422,7 @@ if __name__ == '__main__':
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
 
     from list import DoubleLinkedList as List
+    unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
+
+    from list import ArrayList as List
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
