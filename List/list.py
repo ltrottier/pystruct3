@@ -703,10 +703,8 @@ class CircularDoubleLinkedList(List):
 class ArrayList(List):
     """Array list data structure.
 
-
-
     Args:
-        Nothing.
+        capacity (int): Initial capacity of the array.
 
     Attributs (public):
         Nothing.
@@ -765,6 +763,9 @@ class ArrayList(List):
         self._head = 0
         self._tail = self._size
         self._array = new_array
+
+    def capacity(self):
+        return self._capacity
 
     def insert(self, item, index):
         if (index < -self._size) or (index > self._size):
