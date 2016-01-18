@@ -49,7 +49,7 @@ class List(object):
     def __del__(self):
         """Destroy the list.
         """
-        while self.size() > 0:
+        while self._size > 0:
             self.pop(0)
 
     def insert(self, item, index):
@@ -205,7 +205,7 @@ class List(object):
         Raises:
             Nothing.
         """
-        self.insert(item, self.size())
+        self.insert(item, self._size)
 
 
     def is_empty(self):
@@ -281,7 +281,7 @@ class List(object):
         return new_list
 
     def __eq__(self, other_list):
-        if self.size() != other_list.size():
+        if self._size != other_list.size():
             return False
 
         for item1,item2 in zip(self,other_list):
@@ -365,11 +365,11 @@ class SingleLinkedList(List):
         return self._ForwardIterator(self._head)
 
     def insert(self, item, index):
-        if (index < -self.size()) or (index > self.size()):
+        if (index < -self._size) or (index > self._size):
             raise ValueError('Argument index out of range.')
 
         if index < 0:
-            index = self.size() + index
+            index = self._size + index
 
         if self.is_empty():
             self._head = self._Node(item)
@@ -410,13 +410,13 @@ class SingleLinkedList(List):
 
     def pop(self, index=None):
         if index is None:
-            index = self.size() - 1
+            index = self._size - 1
 
-        if (index < -self.size()) or (index >= self.size()):
+        if (index < -self._size) or (index >= self._size):
             raise ValueError('Argument index out of range.')
 
         if index < 0:
-            index = self.size() + index
+            index = self._size + index
 
         if index == 0:
             item = self._head.item
@@ -432,11 +432,11 @@ class SingleLinkedList(List):
         return item
 
     def read(self, index):
-        if (index < -self.size()) or (index >= self.size()):
+        if (index < -self._size) or (index >= self._size):
             raise ValueError('Argument index out of range.')
 
         if index < 0:
-            index = self.size() + index
+            index = self._size + index
 
         sentinel = self._head
         for i in range(index):
@@ -458,11 +458,11 @@ class SingleLinkedList(List):
         return i
 
     def write(self, item, index):
-        if (index < -self.size()) or (index >= self.size()):
+        if (index < -self._size) or (index >= self._size):
             raise ValueError('Argument index out of range.')
 
         if index < 0:
-            index = self.size() + index
+            index = self._size + index
 
         sentinel = self._head
         for i in range(index):
@@ -542,11 +542,11 @@ class DoubleLinkedList(List):
         return self._ForwardIterator(self._head)
 
     def insert(self, item, index):
-        if (index < -self.size()) or (index > self.size()):
+        if (index < -self._size) or (index > self._size):
             raise ValueError('Argument index out of range.')
 
         if index < 0:
-            index = self.size() + index
+            index = self._size + index
 
         if self.is_empty():
             self._head = self._Node(item)
@@ -556,18 +556,18 @@ class DoubleLinkedList(List):
                 new_node = self._Node(item, self._head)
                 self._head.prev_node = new_node
                 self._head = new_node
-            elif index == self.size():
+            elif index == self._size:
                 new_node = self._Node(item, None, self._tail)
                 self._tail.next_node = new_node
                 self._tail = new_node
             else:
-               if index < self.size() / 2:
+               if index < self._size / 2:
                    sentinel = self._head
                    for i in range(index):
                        sentinel = sentinel.next_node
                else:
                    sentinel = self._tail
-                   for i in range(self.size() - 1, index, -1):
+                   for i in range(self._size - 1, index, -1):
                        sentinel = sentinel.prev_node
 
                new_node = self._Node(item, sentinel, sentinel.prev_node)
@@ -586,7 +586,7 @@ class DoubleLinkedList(List):
             if sentinel is None:
                 raise ValueError('Item not found.')
 
-        if self.size() == 1:
+        if self._size == 1:
             self._head = None
             self._tail = None
         elif sentinel is self._head:
@@ -603,15 +603,15 @@ class DoubleLinkedList(List):
 
     def pop(self, index=None):
         if index is None:
-            index = self.size() - 1
+            index = self._size - 1
 
-        if (index < -self.size()) or (index >= self.size()):
+        if (index < -self._size) or (index >= self._size):
             raise ValueError('Argument index out of range.')
 
         if index < 0:
-            index = self.size() + index
+            index = self._size + index
 
-        if self.size() == 1:
+        if self._size == 1:
             item = self._head.item
             self._head = None
             self._tail = None
@@ -620,18 +620,18 @@ class DoubleLinkedList(List):
                 item = self._head.item
                 self._head.next_node.prev_node = None
                 self._head = self._head.next_node
-            elif index == self.size() - 1:
+            elif index == self._size - 1:
                 item = self._tail.item
                 self._tail.prev_node.next_node = None
                 self._tail = self._tail.prev_node
             else:
-               if index < self.size() / 2:
+               if index < self._size / 2:
                    sentinel = self._head
                    for i in range(index):
                        sentinel = sentinel.next_node
                else:
                    sentinel = self._tail
-                   for i in range(self.size() - 1, index, -1):
+                   for i in range(self._size - 1, index, -1):
                        sentinel = sentinel.prev_node
 
                sentinel.next_node.prev_node = sentinel.prev_node
@@ -643,19 +643,19 @@ class DoubleLinkedList(List):
         return item
 
     def read(self, index):
-        if (index < -self.size()) or (index >= self.size()):
+        if (index < -self._size) or (index >= self._size):
             raise ValueError('Argument index out of range.')
 
         if index < 0:
-            index = self.size() + index
+            index = self._size + index
 
-        if index < self.size() / 2:
+        if index < self._size / 2:
             sentinel = self._head
             for i in range(index):
                 sentinel = sentinel.next_node
         else:
             sentinel = self._tail
-            for i in range(self.size() - 1, index, -1):
+            for i in range(self._size - 1, index, -1):
                 sentinel = sentinel.prev_node
 
         return sentinel.item
@@ -674,19 +674,19 @@ class DoubleLinkedList(List):
         return i
 
     def write(self, item, index):
-        if (index < -self.size()) or (index >= self.size()):
+        if (index < -self._size) or (index >= self._size):
             raise ValueError('Argument index out of range.')
 
         if index < 0:
-            index = self.size() + index
+            index = self._size + index
 
-        if index < self.size() / 2:
+        if index < self._size / 2:
             sentinel = self._head
             for i in range(index):
                 sentinel = sentinel.next_node
         else:
             sentinel = self._tail
-            for i in range(self.size() - 1, index, -1):
+            for i in range(self._size - 1, index, -1):
                 sentinel = sentinel.prev_node
 
         sentinel.item = item
@@ -742,39 +742,115 @@ class ArrayList(List):
             return item
 
     def __init__(self, capacity=2):
+        List.__init__(self)
         self._capacity = capacity
         self._array = [None] * self._capacity
         self._head = 0
         self._tail = 0
 
     def __iter__(self):
-        return self._ForwardIterator()
+        return self._ForwardIterator(self._array, self._head, self._tail)
 
     def _resize(self):
-        self.capacity = self.capacity * 2
-        new_array = [None] * self.capacity
+        new_array = [None] * self._capacity * 2
         i = self._head
         pos = 0
         while i != self._tail:
             new_array[pos] = self._array[i]
             self._array[i] = None
-            i = (i + 1) % self.size()
+            i = (i + 1) % self._capacity
+            pos = pos + 1
+
+        self._capacity = self._capacity * 2
         self._head = 0
-        self._tail = self.size()
+        self._tail = self._size
         self._array = new_array
 
     def insert(self, item, index):
-        if (index < -self.size()) or (index > self.size()):
+        if (index < -self._size) or (index > self._size):
             raise ValueError('Argument index out of range.')
 
         if index < 0:
-            index = self.size() + index
+            index = self._size + index
 
-        if self.size() + 1 == self.capacity:
+        if self._size + 1 == self._capacity:
             self._resize()
 
+        if index < self._size / 2:
+            self._head = (self._head - 1) % self._capacity
+            sentinel = self._head
+            for i in range(index):
+                self._array[sentinel] = self._array[(sentinel + 1) % self._capacity]
+                sentinel = (sentinel + 1) % self._capacity
+        else:
+            sentinel = self._tail
+            self._tail = (self._tail + 1) % self._capacity
+            for i in range(self._size - index):
+                self._array[sentinel] = self._array[(sentinel - 1) % self._capacity]
+                sentinel = (sentinel - 1) % self._capacity
 
+        self._array[sentinel] = item
+        self._size = self._size + 1
 
+    def remove(self, item):
+        self.pop(self.index(item))
 
+    def pop(self, index=None):
+        if index is None:
+            index = self._size - 1
 
+        if (index < -self._size) or (index >= self._size):
+            raise ValueError('Argument index out of range.')
 
+        if index < 0:
+            index = self._size + index
+
+        sentinel = (self._head + index) % self._capacity
+        item = self._array[sentinel]
+        if sentinel < self._size / 2:
+            while sentinel != self._head:
+                self._array[sentinel] = self._array[(sentinel - 1) % self._capacity]
+                sentinel = (sentinel - 1) % self._capacity
+            self._head = (self._head + 1) % self._capacity
+        else:
+            self._tail = (self._tail - 1) % self._capacity
+            while sentinel != self._tail:
+                self._array[sentinel] = self._array[(sentinel + 1) % self._capacity]
+                sentinel = (sentinel + 1) % self._capacity
+
+        self._size = self._size - 1
+        return item
+
+    def read(self, index):
+        if (index < -self._size) or (index >= self._size):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self._size + index
+
+        sentinel = (self._head + index) % self._capacity
+        return self._array[sentinel]
+
+    def index(self, item):
+        if self.is_empty():
+            raise ValueError('Item not found.')
+
+        sentinel = self._head
+        index = 0
+        while self._array[sentinel] != item:
+            sentinel = (sentinel + 1) % self._capacity
+            index = index + 1
+            if sentinel == self._tail:
+                raise ValueError('Item not found.')
+
+        return index
+
+    def write(self, item, index):
+        if (index < -self._size) or (index >= self._size):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self._size + index
+
+        sentinel = (self._head + index) % self._capacity
+        self._array[sentinel] = item
