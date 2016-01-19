@@ -505,7 +505,6 @@ class DoubleLinkedList(List):
             self.prev_node = prev_node
 
         def __del__(self):
-            # print('deleted', self.item, self.next_node)
             self.item = None
             self.next_node = None
             self.prev_node = None
@@ -843,7 +842,174 @@ class CircularSingleLinkedList(List):
 
 
 class CircularDoubleLinkedList(List):
-    pass
+    """Circular double linked list data structure.
+
+    Args:
+        Nothing.
+
+    Attributs (public):
+        Nothing.
+    """
+
+    class _Node(object):
+        """Node class for circular double linked list.
+
+        Args:
+            item (object): Item contained in the node.
+            next_node (_Node): Pointer to next neighbor node.
+            prev_node (_Node): Pointer to previous neighbor node.
+
+        Attributes (public):
+            item (object): Item contained in the node.
+            next_node (_Node): Pointer to next neighbor node.
+            prev_node (_Node): Pointer to previous neighbo node.
+        """
+        def __init__(self, item, next_node=None, prev_node=None):
+            self.item = item
+            self.next_node = next_node
+            self.prev_node = prev_node
+
+        def __del__(self):
+            self.item = None
+            self.next_node = None
+            self.prev_node = None
+
+    class _ForwardIterator(object):
+        """Iterator for CircularDoubleLinkedList.
+
+        Args:
+            head (_Node): The head node of the circular list.
+            current (_Node): The first element of the circular list.
+
+        Attributs (public):
+            head (_Node): The head node of the circular list.
+            current (_Node): The first element of the circular list.
+        """
+
+        def __init__(self, head, current):
+            self.head = head
+            self.current = current
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.current is self.head:
+                raise StopIteration
+
+            item = self.current.item
+            self.current = self.current.next_node
+
+            return item
+
+    def __init__(self):
+        List.__init__(self)
+        self._head = self._Node(None,None,None)
+        self._head.next_node = self._head
+        self._head.prev_node = self._head
+
+    def __iter__(self):
+        return self._ForwardIterator(self._head, self._head.next_node)
+
+    def insert(self, item, index):
+        if (index < -self._size) or (index > self._size):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self._size + index
+
+        sentinel = self._head
+        if index < self._size / 2:
+            for i in range(index):
+                sentinel = sentinel.next_node
+        else:
+            for i in range(self._size - index + 1):
+                sentinel = sentinel.prev_node
+
+        new_node = self._Node(item, sentinel.next_node, sentinel)
+        sentinel.next_node.prev_node = new_node
+        sentinel.next_node = new_node
+        self._size = self._size + 1
+
+    def remove(self, item):
+        sentinel = self._head
+        while sentinel.item != item:
+            sentinel = sentinel.next_node
+            if sentinel is self._head:
+                raise ValueError('Item not found.')
+
+        sentinel.next_node.prev_node = sentinel.prev_node
+        sentinel.prev_node.next_node = sentinel.next_node
+        self._size = self._size - 1
+
+    def pop(self, index=None):
+        if index is None:
+            index = self._size - 1
+
+        if (index < -self._size) or (index >= self._size):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self._size + index
+
+        sentinel = self._head
+        if index < self._size / 2:
+            for i in range(index + 1):
+                sentinel = sentinel.next_node
+        else:
+            for i in range(self._size - index):
+                sentinel = sentinel.prev_node
+
+        item = sentinel.item
+        sentinel.next_node.prev_node = sentinel.prev_node
+        sentinel.prev_node.next_node = sentinel.next_node
+        self._size = self._size - 1
+        return item
+
+    def read(self, index):
+        if (index < -self._size) or (index >= self._size):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self._size + index
+
+        sentinel = self._head
+        if index < self._size / 2:
+            for i in range(index + 1):
+                sentinel = sentinel.next_node
+        else:
+            for i in range(self._size - index):
+                sentinel = sentinel.prev_node
+
+        return sentinel.item
+
+    def index(self, item):
+        sentinel = self._head
+        index = -1
+        while sentinel.item != item:
+            sentinel = sentinel.next_node
+            index = index + 1
+            if sentinel is self._head:
+                raise ValueError('Item not found.')
+
+        return index
+
+    def write(self, item, index):
+        if (index < -self._size) or (index >= self._size):
+            raise ValueError('Argument index out of range.')
+
+        if index < 0:
+            index = self._size + index
+
+        sentinel = self._head
+        if index < self._size / 2:
+            for i in range(index + 1):
+                sentinel = sentinel.next_node
+        else:
+            for i in range(self._size - index):
+                sentinel = sentinel.prev_node
+
+        sentinel.item = item
 
 
 class ArrayList(List):
