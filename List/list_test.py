@@ -426,3 +426,9 @@ if __name__ == '__main__':
 
     from list import ArrayList as List
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
+
+    from list import CircularSingleLinkedList as List
+    unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
+
+    from list import CircularDoubleLinkedList as List
+    unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
