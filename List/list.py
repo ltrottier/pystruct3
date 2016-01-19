@@ -26,6 +26,12 @@
 List data structures.
 
 This module contains class implementations of several List types.
+The available lists are:
+    SingleLinkedList
+    DoubleLinkedList
+    CircularSingleLinkedList
+    CircularDoubleLinkedList
+    ArrayList
 """
 
 class List(object):
