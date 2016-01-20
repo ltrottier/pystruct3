@@ -234,6 +234,10 @@ class TestListMethods(unittest.TestCase):
         self.assertTrue(self.empty_list.is_empty())
         self.assertFalse(self.some_list.is_empty())
 
+    def test_clear_ok(self):
+        self.some_list.clear()
+        self.assertEqual(self.some_list, self.empty_list)
+
     def test_index_raises(self):
         with self.assertRaises(ValueError):
             self.empty_list.index(2)

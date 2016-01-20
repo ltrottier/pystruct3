@@ -55,8 +55,7 @@ class List(object):
     def __del__(self):
         """Destroy the list.
         """
-        while self._size > 0:
-            self.pop(0)
+        self.clear()
 
     def insert(self, item, index):
         """Insert an item at a certain index.
@@ -162,6 +161,22 @@ class List(object):
                         if index < -1 * list size or if index >= list size.
         """
         raise NotImplementedError
+
+    def clear(self):
+        """Remove all items from the list.
+
+        Args:
+            Nothing.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            Nothing.
+        """
+        while self._size > 0:
+            self.pop(0)
+
 
     def size(self):
         """Get the size of the list.
