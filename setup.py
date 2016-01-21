@@ -22,3 +22,15 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+from setuptools import setup
+
+setup(name='pystruct3',
+      version='0.1',
+      description='Algorithms and Data Structures in Python 3',
+      url='https://github.com/ltrottier/pystruct3',
+      author='Ludovic Trottier',
+      author_email='ludovic.trottier.2@gmail.com',
+      license='MIT',
+      packages=['pystruct3'],
+      zip_safe=False)
