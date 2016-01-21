@@ -161,6 +161,9 @@ class Stack(object):
         Raises:
             ValueError: An error occurs when the list is empty.
         """
+        if self.is_empty():
+            raise ValueError('The stack is empty.')
+
         return self._head.item
 
     def write(self, item):
