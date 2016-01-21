@@ -26,7 +26,7 @@
 from setuptools import setup
 
 setup(name='pystruct3',
-      version='0.1',
+      version='0.1.3',
       description='Algorithms and Data Structures in Python 3',
       url='https://github.com/ltrottier/pystruct3',
       author='Ludovic Trottier',
