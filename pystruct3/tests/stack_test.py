@@ -25,7 +25,7 @@
 
 import unittest
 import random
-from stack import Stack
+from pystruct3.stack import Stack
 
 class TestStackMethods(unittest.TestCase):
 

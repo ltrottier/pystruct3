@@ -32,6 +32,5 @@ setup(name='pystruct3',
       author='Ludovic Trottier',
       author_email='ludovic.trottier.2@gmail.com',
       license='MIT',
-      packages=['pystruct3', 'pystruct3.list', 'pystruct3.stack',
-                'pystruct3.queue'],
+      packages=['pystruct3'],
       zip_safe=False)

@@ -422,17 +422,17 @@ class TestListMethods(unittest.TestCase):
         self.assertFalse(l == self.some_list)
 
 if __name__ == '__main__':
-    from list import SingleLinkedList as List
+    from pystruct3.list import SingleLinkedList as List
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
 
-    from list import DoubleLinkedList as List
+    from pystruct3.list import DoubleLinkedList as List
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
 
-    from list import ArrayList as List
+    from pystruct3.list import ArrayList as List
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
 
-    from list import CircularSingleLinkedList as List
+    from pystruct3.list import CircularSingleLinkedList as List
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
 
-    from list import CircularDoubleLinkedList as List
+    from pystruct3.list import CircularDoubleLinkedList as List
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestListMethods))
