@@ -26,11 +26,12 @@
 from setuptools import setup
 
 setup(name='pystruct3',
-      version='0.1.3',
+      version='0.1.6',
       description='Algorithms and Data Structures in Python 3',
       url='https://github.com/ltrottier/pystruct3',
       author='Ludovic Trottier',
       author_email='ludovic.trottier.2@gmail.com',
       license='MIT',
-      packages=['pystruct3'],
+      packages=['pystruct3', 'pystruct3.list', 'pystruct3.stack',
+                'pystruct3.queue'],
       zip_safe=False)
