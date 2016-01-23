@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # The MIT License (MIT)
@@ -31,13 +30,10 @@ The available queues are:
 
 """
 
-from pystruct3.list import DoubleLinkedList
+from pystruct3.list import DoubleLinkedList as _DoubleLinkedList
 
 class Queue(object):
-    """Queue data structure interface.
-
-    This is the interface of a queue data structure. All queue classes are
-    sub-classes of Queue.
+    """Queue data structure.
 
     Args:
         Nothing.
@@ -48,7 +44,7 @@ class Queue(object):
     def __init__(self):
         """Create an empty queue.
         """
-        self.items = DoubleLinkedList()
+        self._items = _DoubleLinkedList()
 
     def __del__(self):
         """Destroy the queue.
@@ -68,7 +64,7 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        self.items.append(item)
+        self._items.append(item)
 
     def dequeue(self):
         """Remove the first item of the queue
@@ -82,7 +78,7 @@ class Queue(object):
         Raises:
             ValueError: An error occurs when the list is empty.
         """
-        return self.items.pop()
+        return self._items.pop()
 
     def first(self):
         """Read the first item of the queue
@@ -98,7 +94,7 @@ class Queue(object):
         Raises:
             ValueError: An error occurs when the list is empty.
         """
-        return self.items[0]
+        return self._items[0]
 
     def last(self):
         """Read the last item of the queue
@@ -114,7 +110,7 @@ class Queue(object):
         Raises:
             ValueError: An error occurs when the list is empty.
         """
-        return self.items[-1]
+        return self._items[-1]
 
     def contains(self, item):
         """Verify if an item is in the queue.
@@ -130,7 +126,7 @@ class Queue(object):
         Raises:
             Nothing
         """
-        return (item in self.items)
+        return (item in self._items)
 
     def copy(self, ):
         """Deep copy of the queue.
@@ -144,7 +140,7 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        return self.items.copy()
+        return self._items.copy()
 
     def clear(self):
         """Remove all items from the queue.
@@ -158,7 +154,7 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        self.items.clear()
+        self._items.clear()
 
     def size(self):
         """Get the size of the queue.
@@ -174,7 +170,7 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        return self.items.size()
+        return self._items.size()
 
     def is_empty(self):
         """Verify if the queue is empty.
@@ -190,19 +186,19 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        return self.items.is_empty()
+        return self._items.is_empty()
 
     def __len__(self):
-        return self.items.size()
+        return self._items.size()
 
     def __contains__(self, item):
         return self.contains(item)
 
     def __eq__(self, other_queue):
-        return self.items == other_queue.items
+        return self._items == other_queue.items
 
     def __iter__(self):
-        return self.items.__iter__()
+        return self._items.__iter__()
 
     def __repr__(self):
-        return self.items.__repr__()
+        return self._items.__repr__()
