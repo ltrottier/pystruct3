@@ -33,7 +33,10 @@ The available queues are:
 from pystruct3.list import DoubleLinkedList as _DoubleLinkedList
 
 class Queue(object):
-    """Queue data structure.
+    """Queue data structure interface.
+
+    This is the interface of a queue data structure. All queue classes are
+    sub-classes of Queue.
 
     Args:
         Nothing.
@@ -44,13 +47,12 @@ class Queue(object):
     def __init__(self):
         """Create an empty queue.
         """
-        self._items = _DoubleLinkedList()
+        self._size = 0
 
     def __del__(self):
         """Destroy the queue.
         """
         self.clear()
-
 
     def enqueue(self, item):
         """Add an item to the queue
@@ -64,7 +66,7 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        self._items.append(item)
+        raise NotImplementedError
 
     def dequeue(self):
         """Remove the first item of the queue
@@ -78,7 +80,7 @@ class Queue(object):
         Raises:
             ValueError: An error occurs when the list is empty.
         """
-        return self._items.pop()
+        raise NotImplementedError
 
     def first(self):
         """Read the first item of the queue
@@ -94,7 +96,7 @@ class Queue(object):
         Raises:
             ValueError: An error occurs when the list is empty.
         """
-        return self._items[0]
+        raise NotImplementedError
 
     def last(self):
         """Read the last item of the queue
@@ -110,7 +112,7 @@ class Queue(object):
         Raises:
             ValueError: An error occurs when the list is empty.
         """
-        return self._items[-1]
+        raise NotImplementedError
 
     def contains(self, item):
         """Verify if an item is in the queue.
@@ -126,9 +128,9 @@ class Queue(object):
         Raises:
             Nothing
         """
-        return (item in self._items)
+        raise NotImplementedError
 
-    def copy(self, ):
+    def copy(self):
         """Deep copy of the queue.
 
         Args:
@@ -140,7 +142,7 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        return self._items.copy()
+        raise NotImplementedError
 
     def clear(self):
         """Remove all items from the queue.
@@ -154,7 +156,8 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        self._items.clear()
+        while self._size > 0:
+            self.dequeue()
 
     def size(self):
         """Get the size of the queue.
@@ -170,7 +173,7 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        return self._items.size()
+        return self._size
 
     def is_empty(self):
         """Verify if the queue is empty.
@@ -186,13 +189,61 @@ class Queue(object):
         Raises:
             Nothing.
         """
-        return self._items.is_empty()
+        return self._size == 0
 
     def __len__(self):
-        return self._items.size()
+        return self._size
 
     def __contains__(self, item):
         return self.contains(item)
+
+    def __eq__(self, other_queue):
+        raise NotImplementedError
+
+    def __iter__(self):
+        raise NotImplementedError
+
+    def __repr__(self):
+        raise NotImplementedError
+
+class LIFOQueue(Queue):
+    """Queue data structure.
+
+    This data structure is based on a double linked list as internal container
+    for the items.
+
+    Args:
+        Nothing.
+
+    Attributes (public):
+        Nothing.
+    """
+    def __init__(self):
+        Queue.__init__(self)
+        self._items = _DoubleLinkedList()
+
+    def __del__(self):
+        self.clear()
+
+    def enqueue(self, item):
+        self._size = self._size + 1
+        self._items.append(item)
+
+    def dequeue(self):
+        self._size = self._size - 1
+        return self._items.pop()
+
+    def first(self):
+        return self._items[0]
+
+    def last(self):
+        return self._items[-1]
+
+    def contains(self, item):
+        return (item in self._items)
+
+    def copy(self):
+        return self._items.copy()
 
     def __eq__(self, other_queue):
         return self._items == other_queue.items
@@ -202,3 +253,6 @@ class Queue(object):
 
     def __repr__(self):
         return self._items.__repr__()
+
+class PriorityQueue(Queue):
+    pass
