@@ -231,7 +231,7 @@ class LIFOQueue(Queue):
 
     def dequeue(self):
         self._size = self._size - 1
-        return self._items.pop()
+        return self._items.pop(0)
 
     def first(self):
         return self._items[0]
@@ -243,10 +243,13 @@ class LIFOQueue(Queue):
         return (item in self._items)
 
     def copy(self):
-        return self._items.copy()
+        copy_queue = self.__class__()
+        copy_queue._items = self._items.copy()
+        copy_queue._size = self._size
+        return copy_queue
 
     def __eq__(self, other_queue):
-        return self._items == other_queue.items
+        return self._items == other_queue._items
 
     def __iter__(self):
         return self._items.__iter__()
