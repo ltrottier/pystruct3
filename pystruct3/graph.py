@@ -1,0 +1,248 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+#
+# The MIT License (MIT)
+#
+# Copyright (c) 2016 Ludovic Trottier
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+"""
+
+
+Graph -->
+
+    Undirected Graph -->
+
+        Tree -->
+
+
+
+    Directed Graph -->
+
+        DirectedRootedTree -->
+
+            BinaryDirectedRootedTree -->
+
+                Heap -->
+
+                    LinkedNodeHeap
+                    ArrayHeap
+
+
+
+"""
+
+class Graph(object):
+    """
+    """
+
+    def __init__(self):
+        self._n_nodes = 0
+
+    def adjacent(self, vertice1, vertice2):
+        """Verify if there is an edge between vertice1 and vertice2
+
+        Args:
+            vertice1 (object): The first vertice.
+            vertice2 (object): The second vertice.
+
+        Returns:
+            bool: True if there is an edge between vertice1 and vertice2,
+                  False otherwise.
+
+        Raises:
+            ValueError: An error occurs if one of the vertices is not in the
+                        Graph.
+        """
+        raise NotImplementedError
+
+    def neighbors(self, vertice):
+        """Lists all vertices that are connected to the given vertice.
+
+        Args:
+            vertice (object): The given vertice.
+
+        Returns:
+            python list: The list of adjacent neighbors to the given vertice.
+
+        Raises:
+            ValueError: An error occurs if vertice is not in the graph.
+        """
+        raise NotImplementedError
+
+    def insert(self, vertice):
+        """Insert a vertice to the Graph.
+
+        After insertion, the new vertice is not connected to any nodes.
+
+        Args:
+            vertice (object): The given vertice.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            ValueError: An error occurs when vertice is already in the graph.
+        """
+        raise NotImplementedError
+
+    def remove(self, vertice):
+        """Remove a vertice from the Graph.
+
+        All connections from/to vertice are deleted.
+
+        Args:
+            vertice (object): The given vertice.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            ValueError: An error occurs when vertice is not in the graph.
+        """
+        raise NotImplementedError
+
+    def connect(self, vertice1, vertice2):
+        """Insert an edge between vertice1 and vertice2.
+
+        If the graph is directed, the edge goes from vertices 1 to vertice2.
+
+        Args:
+            vertice1 (object): The first vertice.
+            vertice2 (object): The second vertice.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            ValueError: An error occurs if one of the vertices is not in the
+                        Graph.
+        """
+        raise NotImplementedError
+
+    def disconnect(self, vertice1, vertice2):
+        """Remove the edge between vertice1 and vertice2.
+
+        If the graph is directed, the edge goes from vertices1 to vertice2.
+
+        Args:
+            vertice1 (object): The first vertice.
+            vertice2 (object): The second vertice.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            ValueError: An error occurs if one of the vertices is not in the
+                        Graph.
+            ValueError: An error occurs if the two vertices are not connected.
+        """
+        raise NotImplementedError
+
+    def n_nodes(self):
+        """Return the number of nodes in the graph.
+
+        Args:
+            Nothing.
+
+        Returns:
+            int: Number of nodes in the graph.
+
+        Raises:
+            Nothing.
+        """
+        return self._n_nodes
+
+    def n_edges(self):
+        """Return the number of edges in the graph.
+
+        Args:
+            Nothing.
+
+        Returns:
+            int: Number of egdes in the graph.
+
+        Raises:
+            Nothing.
+        """
+        raise NotImplementedError
+
+
+class DirectedGraph(Graph):
+    """A directed graph is a graph where edges have a direction.
+    """
+
+    def __init__(self):
+        Graph.__init__(self)
+
+
+class UndirectedGraph(Graph):
+    """An undirected graph is a graph where edges have no direction (or are
+       by default bi-directional).
+    """
+
+    def __init__(self):
+        Graph.__init__(self)
+
+
+class Tree(UndirectedGraph):
+    """A tree is an undirected graph in which any two vertices are
+       connected by exactly one path.
+    """
+    def __init__(self):
+        UndirectedGraph.__init__(self)
+
+
+class DirectedRootedTree(DirectedGraph):
+    """A directed rooted tree is a tree in which one vertice is designated
+       as the root. All edges are pointing away from the root.
+    """
+    def __init__(self):
+        DirectedGraph.__init__(self)
+
+
+class BinaryDirectedRootedTree(DirectedRootedTree):
+    """A binary directed rooted tree is a directed rooted tree in which a node
+       has at most 2 children.
+    """
+    def __init__(self):
+        DirectedRootedTree.__init__(self)
+
+
+class Heap(BinaryDirectedRootedTree):
+    """A heap is a binary directed rooted tree that satisfies the heap
+       property.
+    """
+    def __init__(self):
+        BinaryDirectedRootedTree.__init__(self)
+
+
+class LinkedNodeHeap(Heap):
+    """A heap implement with linked nodes.
+    """
+    def __init__(self):
+        Heap.__init__(self)
+
+
+class ArrayHeap(Heap):
+    """A heap implement with an array.
+    """
+    def __init__(self):
+        Heap.__init__(self)
