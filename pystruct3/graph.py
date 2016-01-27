@@ -26,15 +26,19 @@
 """
 
 
-Graph -->
+Graph (abstract) -->
 
     Undirected Graph -->
+
+        AdjacencyListUndirectedGraph
 
         Tree -->
 
 
 
     Directed Graph -->
+
+        AdjacencyListDirectedGraph
 
         DirectedRootedTree -->
 
@@ -185,53 +189,48 @@ class Graph(object):
         raise NotImplementedError
 
 
-class DirectedGraph(Graph):
-    """A directed graph is a graph where edges have a direction.
+
+class AdjacencyListGraph(Graph):
+    """An adjacency list graph is a graph where every vertex stores a
+       list of adjacent vertices.
     """
 
     def __init__(self):
         Graph.__init__(self)
 
 
-class UndirectedGraph(Graph):
-    """An undirected graph is a graph where edges have no direction (or are
-       by default bi-directional).
+class AdjacencyMatrixGraph(Graph):
+    """An adjacency matrix graph is a graph where a two-dimensional matrix
+       stores edges information, in which the rows represent
+       source vertices and columns represent destination vertices.
     """
 
     def __init__(self):
         Graph.__init__(self)
 
+class IncidenceMatrixGraph(Graph):
+    """ An incidence matrix graph is a graph where a two-dimensional matrix
+       stores edges information, in which the rows represent the vertices
+       and columns represent the edges.
+    """
 
-class Tree(UndirectedGraph):
-    """A tree is an undirected graph in which any two vertices are
-       connected by exactly one path.
+    def __init__(self):
+        Graph.__init__(self)
+
+class Tree(Graph):
+    """A tree is a directed graph in which: 1. any two vertices are
+       connected by exactly one path, 2. there is a node call the source, and
+       3. all nodes point away from the source.
     """
     def __init__(self):
-        UndirectedGraph.__init__(self)
+        Graph.__init__(self)
 
 
-class DirectedRootedTree(DirectedGraph):
-    """A directed rooted tree is a tree in which one vertice is designated
-       as the root. All edges are pointing away from the root.
+class Heap(Tree):
+    """A heap is a tree that satisfies the heap property.
     """
     def __init__(self):
-        DirectedGraph.__init__(self)
-
-
-class BinaryDirectedRootedTree(DirectedRootedTree):
-    """A binary directed rooted tree is a directed rooted tree in which a node
-       has at most 2 children.
-    """
-    def __init__(self):
-        DirectedRootedTree.__init__(self)
-
-
-class Heap(BinaryDirectedRootedTree):
-    """A heap is a binary directed rooted tree that satisfies the heap
-       property.
-    """
-    def __init__(self):
-        BinaryDirectedRootedTree.__init__(self)
+        Tree.__init__(self)
 
 
 class LinkedNodeHeap(Heap):
