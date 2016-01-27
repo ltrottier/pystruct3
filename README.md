@@ -1,10 +1,9 @@
-# pystruct
+# pystruct3
 Algorithms and Data Structures in Python 3.
 
 The goal of this project is to help python newcomers understand how to implement and test data structures in Python 3.
 
 Currently available:
-
 * List
   - Single linked
   - Double linked
