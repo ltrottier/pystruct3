@@ -34,7 +34,7 @@ class Graph(object):
     """
 
     def __init__(self):
-        self._n_nodes = 0
+        self._n_vertices = 0
         self._n_edges = 0
 
     def adjacent(self, vertice1, vertice2):
@@ -161,19 +161,19 @@ class Graph(object):
         """
         return self._n_edges
 
-    def n_nodes(self):
-        """Return the number of nodes in the graph.
+    def n_vertices(self):
+        """Return the number of vertices in the graph.
 
         Args:
             Nothing.
 
         Returns:
-            int: Number of nodes in the graph.
+            int: Number of vertices in the graph.
 
         Raises:
             Nothing.
         """
-        return self._n_nodes
+        return self._n_vertices
 
     def __len__(self):
         return self._n_nodes
