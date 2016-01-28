@@ -176,7 +176,7 @@ class Graph(object):
         return self._n_vertices
 
     def __len__(self):
-        return self._n_nodes
+        return self._n_vertices
 
     def __repr__(self):
         items = ['{']
@@ -261,13 +261,13 @@ class AdjacencyListGraph(Graph):
 
     def insert(self, vertice):
         self.nodes.append(self._Node(vertice))
-        self._n_nodes = self._n_nodes + 1
+        self._n_vertices = self._n_vertices + 1
 
     def remove(self, vertice):
         self.nodes.remove(self._Node(vertice))
         for node in self.nodes:
             node.neighbors.remove(vertice)
-        self._n_nodes = self._n_nodes - 1
+        self._n_vertices = self._n_vertices - 1
 
     def connect(self, vertice1, vertice2):
         node1 = self._get_node_from_vertice(vertice1)
