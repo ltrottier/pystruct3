@@ -37,6 +37,11 @@ class Graph(object):
         self._n_vertices = 0
         self._n_edges = 0
 
+    def __del__(self):
+        """Destroy the graph.
+        """
+        self.clear()
+
     def adjacent(self, vertice1, vertice2):
         """Verify if there is an edge between vertice1 and vertice2
 
@@ -55,7 +60,7 @@ class Graph(object):
         raise NotImplementedError
 
     def neighbors(self, vertice):
-        """Lists all vertices that are connected to the given vertice.
+        """Lists all vertices that are adjacent to the given vertice.
 
         Args:
             vertice (object): The given vertice.
@@ -175,8 +180,91 @@ class Graph(object):
         """
         return self._n_vertices
 
+    def is_empty(self):
+        """Verify if the graph contains vertices.
+
+        Does not modify the graph.
+
+        Args:
+            Nothing.
+
+        Returns:
+            bool: True if the graph contains no vertices, False otherwise.
+
+        Raises:
+            Nothing.
+        """
+        return self._n_vertices == 0
+
+    def equal(self, other_graph):
+        """Graph equality.
+
+        The graphs are equal if they have 1. the same vertices and 2. the same
+        adjacency matrix.
+
+        Args:
+            other_graph (Graph): The other graph.
+
+        Returns:
+            bool: True if the two graphs are equal, False otherwise.
+
+        Raises:
+            Nothing.
+        """
+        vertices1 = self.vertices()
+        vertices2 = other_graph.vertices()
+        if len(vertices1) != len(vertices2):
+            return False
+        for vi in vertices1:
+            if vi not in vertices2:
+                return False
+        for vi in vertices1:
+            for vj in vertices1:
+                if self.adjacent(vi,vj) != other_graph.adjacent(vi,vj):
+                    return False
+        return True
+
+    def copy(self):
+        """Deep copy of the graph.
+
+        Args:
+            Nothing.
+
+        Returns:
+            Graph: A deep copy of the graph
+
+        Raises:
+            Nothing.
+        """
+        copy_graph = self.__class__()
+        for v in self.vertices():
+            copy_graph.insert(v)
+        for vi in self.vertices():
+            for vj in self.vertices():
+                if copy_graph.adjacent(vi,vj) != self.adjacent(vi,vj):
+                    copy_graph.connect(vi,vj)
+        return copy_graph
+
+    def clear(self):
+        """Remove all vertices from the graph.
+
+        Args:
+            Nothing.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            Nothing.
+        """
+        for v in self.vertices():
+            self.remove(v)
+
     def __len__(self):
         return self._n_vertices
+
+    def __eq__(self, other_graph):
+        return self.equal(other_graph)
 
     def __repr__(self):
         items = ['{']
@@ -244,30 +332,44 @@ class AdjacencyListGraph(Graph):
 
         V1toV2 = False
         V2toV1 = False
-        for node in node1.neighbors:
-            if node == node2:
+        for v in node1.neighbors:
+            if v == node2.vertice:
                 V1toV2 = True
-        for node in node2.neighbors:
-            if node == node1:
+        for v in node2.neighbors:
+            if v == node1.vertice:
                 V2toV1 = True
 
         return V1toV2 or V2toV1
 
     def neighbors(self, vertice):
         node = self._get_node_from_vertice(vertice)
-        return [v for v in node.neighbors]
+        neig = [v for v in node.neighbors]
+        for node in self.nodes:
+            if ((node.vertice != vertice) and (vertice in node.neighbors)
+                and (node.vertice not in neig)):
+                neig.append(node.vertice)
+        return neig
 
     def vertices(self):
         return [node.vertice for node in self.nodes]
 
     def insert(self, vertice):
-        self.nodes.append(self._Node(vertice))
+        new_node = self._Node(vertice)
+        if new_node in self.nodes:
+            raise ValueError('Vertice already in the graph.')
+        self.nodes.append(new_node)
         self._n_vertices = self._n_vertices + 1
 
     def remove(self, vertice):
-        self.nodes.remove(self._Node(vertice))
+        try:
+            self.nodes.remove(self._Node(vertice))
+        except ValueError as err:
+            raise ValueError('Vertice not in the graph.') from err
         for node in self.nodes:
-            node.neighbors.remove(vertice)
+            try:
+                node.neighbors.remove(vertice)
+            except ValueError:
+                pass
         self._n_vertices = self._n_vertices - 1
 
     def connect(self, vertice1, vertice2):
