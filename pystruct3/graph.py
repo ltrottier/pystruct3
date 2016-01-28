@@ -190,7 +190,8 @@ class Graph(object):
             items.pop()
             items.append(']')
             items.append(',\n ')
-        items.pop()
+        if self.n_vertices() > 0:
+            items.pop()
         items.append('}')
         return "".join(items)
 
