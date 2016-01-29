@@ -228,6 +228,20 @@ class List(object):
         """
         self.insert(item, self._size)
 
+    def extend(self, other_list):
+        """Extend the list with another list.
+
+        Args:
+            other_list (List):
+
+        Returns:
+            Nothing.
+
+        Raises:
+            Nothing.
+        """
+        for item in other_list:
+            self.append(item)
 
     def is_empty(self):
         """Verify if the list is empty.
@@ -302,7 +316,7 @@ class List(object):
         return new_list
 
     def __eq__(self, other_list):
-        if self.size() != other_list.size():
+        if len(self) != len(other_list):
             return False
 
         for item1,item2 in zip(self,other_list):
