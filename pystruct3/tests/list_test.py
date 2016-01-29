@@ -371,6 +371,20 @@ class TestListMethods(unittest.TestCase):
         self.assertEqual(p[1],7)
         self.assertEqual(p[2],1)
 
+    def test_extend_ok(self):
+        self.empty_list.extend(self.some_list)
+        self.assertEqual(self.empty_list, self.some_list)
+
+        self.unit_list.extend(self.some_list)
+        self.assertEqual([4,3,1,2], self.unit_list)
+
+        self.some_list.extend([5,4,3,2,1])
+        self.assertEqual([3,1,2,5,4,3,2,1], self.some_list)
+
+        a = [3,2,3]
+        a.extend(self.unit_list)
+        self.assertEqual([3,2,3,4,3,1,2], a)
+
     def test_equal_ok(self):
         p = List()
         l = List()
