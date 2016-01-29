@@ -302,7 +302,7 @@ class List(object):
         return new_list
 
     def __eq__(self, other_list):
-        if self._size != other_list.size():
+        if self.size() != other_list.size():
             return False
 
         for item1,item2 in zip(self,other_list):
