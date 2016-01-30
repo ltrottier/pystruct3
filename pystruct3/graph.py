@@ -379,12 +379,16 @@ class AdjacencyListGraph(Graph):
 
     def remove(self, vertice):
         try:
-            self.nodes.remove(self._Node(vertice))
+            idx = self.nodes.index(self._Node(vertice))
         except ValueError as err:
             raise ValueError('Vertice not in the graph.') from err
+        vertice_node = self.nodes.pop(idx)
+        self._n_edges = self._n_edges - len(vertice_node.neighbors)
+        vertice_node = None
         for node in self.nodes:
             try:
                 node.neighbors.remove(vertice)
+                self._n_edges = self._n_edges - 1
             except ValueError:
                 pass
         self._n_vertices = self._n_vertices - 1
