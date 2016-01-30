@@ -180,6 +180,20 @@ class Graph(object):
         """
         return self._n_vertices
 
+    def contains(self, vertice):
+        """Verify if a vertice is in the graph.
+
+        Args:
+            vertice (object): The queried vertice.
+
+        Returns:
+            bool: True if the vertice is in the graph, False otherwise.
+
+        Raises:
+            Nothing.
+        """
+        return vertice in self.vertices()
+
     def is_empty(self):
         """Verify if the graph contains vertices.
 
@@ -259,6 +273,9 @@ class Graph(object):
         """
         for v in self.vertices():
             self.remove(v)
+
+    def __contains__(self, vertice):
+        return self.contains(vertice)
 
     def __len__(self):
         return self._n_vertices
