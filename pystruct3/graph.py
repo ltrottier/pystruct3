@@ -428,32 +428,3 @@ class IncidenceMatrixGraph(Graph):
 
     def __init__(self):
         Graph.__init__(self)
-
-class Tree(Graph):
-    """A tree is a directed graph in which: 1. any two vertices are
-       connected by exactly one path, 2. there is a node call the source, and
-       3. all nodes point away from the source.
-    """
-    def __init__(self):
-        Graph.__init__(self)
-
-
-class Heap(Tree):
-    """A heap is a tree that satisfies the heap property.
-    """
-    def __init__(self):
-        Tree.__init__(self)
-
-
-class LinkedNodeHeap(Heap):
-    """A heap implement with linked nodes.
-    """
-    def __init__(self):
-        Heap.__init__(self)
-
-
-class ArrayHeap(Heap):
-    """A heap implement with an array.
-    """
-    def __init__(self):
-        Heap.__init__(self)
