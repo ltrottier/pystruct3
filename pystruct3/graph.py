@@ -434,7 +434,9 @@ class AdjacencyMatrixGraph(Graph):
         for i in range(self._n_vertices):
             neig = self._vertices[i]
             if self._matrix[idx,i] and (neig not in neighbors):
-               neighbors.append(neig)
+                neighbors.append(neig)
+            if self._matrix[i, idx] and (neig not in neighbors):
+                neighbors.append(neig)
         return neighbors
 
     def vertices(self):
