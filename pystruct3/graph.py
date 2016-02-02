@@ -456,13 +456,19 @@ class AdjacencyMatrixGraph(Graph):
             for j in range(idx, self._n_vertices):
                 if j == idx:
                     self._n_edges = self._n_edges - self._matrix[i,j]
-                self._matrix[i,j] = self._matrix[i,j+1]
+                if j == self._n_vertices - 1:
+                    del self._matrix[i,j]
+                else:
+                    self._matrix[i,j] = self._matrix[i,j+1]
 
         for i in range(idx, self._n_vertices):
             for j in range(self._n_vertices):
                 if i == idx:
                     self._n_edges = self._n_edges - self._matrix[i,j]
-                self._matrix[i,j] = self._matrix[i+1,j]
+                if i == self._n_vertices - 1:
+                    del self._matrix[i,j]
+                else:
+                    self._matrix[i,j] = self._matrix[i+1,j]
 
         self._n_vertices = self._n_vertices - 1
 
