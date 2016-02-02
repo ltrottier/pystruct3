@@ -28,6 +28,7 @@
 """
 
 from pystruct3.list import DoubleLinkedList as _DoubleLinkedList
+import collections
 
 class Graph(object):
     """
@@ -419,6 +420,68 @@ class AdjacencyMatrixGraph(Graph):
 
     def __init__(self):
         Graph.__init__(self)
+        self._matrix = collections.defaultdict(lambda:False)
+        self._vertices = _DoubleLinkedList()
+
+    def adjacent(self, vertice1, vertice2):
+        idx1 = self._vertices.index(vertice1)
+        idx2 = self._vertices.index(vertice2)
+        return self._matrix[idx1,idx2] or self._matrix[idx2,idx1]
+
+    def neighbors(self, vertice):
+        idx = self._vertices.index(vertice)
+        neighbors = []
+        for i in range(self._n_vertices):
+            neig = self._vertices[i]
+            if self._matrix[idx,i] and (neig not in neighbors):
+               neighbors.append(neig)
+        return neighbors
+
+    def vertices(self):
+        return [v for v in self._vertices]
+
+    def insert(self, vertice):
+        if vertice in self._vertices:
+            raise ValueError('Vertice already in the graph.')
+        self._vertices.append(vertice)
+        self._n_vertices = self._n_vertices + 1
+
+    def remove(self, vertice):
+        idx = self._vertices.index(vertice)
+        self._vertices.pop(idx)
+
+        for i in range(self._n_vertices):
+            for j in range(idx, self._n_vertices):
+                if j == idx:
+                    self._n_edges = self._n_edges - self._matrix[i,j]
+                self._matrix[i,j] = self._matrix[i,j+1]
+
+        for i in range(idx, self._n_vertices):
+            for j in range(self._n_vertices):
+                if i == idx:
+                    self._n_edges = self._n_edges - self._matrix[i,j]
+                self._matrix[i,j] = self._matrix[i+1,j]
+
+        self._n_vertices = self._n_vertices - 1
+
+    def connect(self, vertice1, vertice2):
+        idx1 = self._vertices.index(vertice1)
+        idx2 = self._vertices.index(vertice2)
+        if self._matrix[idx1,idx2]:
+            raise ValueError('Edge already exists.')
+        else:
+            self._matrix[idx1,idx2] = True
+        self._n_edges = self._n_edges + 1
+
+    def disconnect(self, vertice1, vertice2):
+        idx1 = self._vertices.index(vertice1)
+        idx2 = self._vertices.index(vertice2)
+        if not self._matrix[idx1,idx2]:
+            raise ValueError('Edge does not exists.')
+        else:
+            self._matrix[idx1,idx2] = False
+        self._n_edges = self._n_edges - 1
+
 
 class IncidenceMatrixGraph(Graph):
     """ An incidence matrix graph is a graph where a two-dimensional matrix
