@@ -310,3 +310,6 @@ class TestGraphMethods(unittest.TestCase):
 if __name__ == '__main__':
     from pystruct3.graph import AdjacencyListGraph as Graph
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestGraphMethods))
+
+    from pystruct3.graph import AdjacencyMatrixGraph as Graph
+    unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestGraphMethods))
