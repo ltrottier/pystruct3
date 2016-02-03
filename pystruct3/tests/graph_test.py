@@ -55,7 +55,7 @@ class TestGraphMethods(unittest.TestCase):
         self.assertTrue(self.some_graph.adjacent(4,5))
         self.assertTrue(self.some_graph.adjacent(5,4))
         self.assertTrue(self.some_graph.adjacent(2,5))
-        self.assertTrue(self.some_graph.adjacent(5,2))
+        self.assertFalse(self.some_graph.adjacent(5,2))
         self.assertFalse(self.some_graph.adjacent(2,4))
         self.assertFalse(self.some_graph.adjacent(4,2))
 
@@ -78,11 +78,11 @@ class TestGraphMethods(unittest.TestCase):
 
     def test_neighbors_ok(self):
         self.assertEqual([], self.unit_graph.neighbors(2))
-        self.assertEqual([2,4], sorted(self.some_graph.neighbors(5)))
+        self.assertEqual([4], sorted(self.some_graph.neighbors(5)))
         self.assertEqual([5], sorted(self.some_graph.neighbors(4)))
         self.assertEqual([5], sorted(self.some_graph.neighbors(2)))
         self.some_graph.connect(5,5)
-        self.assertEqual([2,4,5], sorted(self.some_graph.neighbors(5)))
+        self.assertEqual([4,5], sorted(self.some_graph.neighbors(5)))
 
     def test_vertices_ok(self):
         self.assertEqual([], sorted(self.empty_graph.vertices()))

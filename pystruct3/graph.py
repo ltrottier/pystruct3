@@ -348,25 +348,14 @@ class AdjacencyListGraph(Graph):
         node1 = self._get_node_from_vertice(vertice1)
         node2 = self._get_node_from_vertice(vertice2)
 
-        V1toV2 = False
-        V2toV1 = False
         for v in node1.neighbors:
             if v == node2.vertice:
-                V1toV2 = True
-        for v in node2.neighbors:
-            if v == node1.vertice:
-                V2toV1 = True
-
-        return V1toV2 or V2toV1
+                return True
+        return False
 
     def neighbors(self, vertice):
         node = self._get_node_from_vertice(vertice)
-        neig = [v for v in node.neighbors]
-        for node in self.nodes:
-            if ((node.vertice != vertice) and (vertice in node.neighbors)
-                and (node.vertice not in neig)):
-                neig.append(node.vertice)
-        return neig
+        return [v for v in node.neighbors]
 
     def vertices(self):
         return [node.vertice for node in self.nodes]
@@ -426,7 +415,7 @@ class AdjacencyMatrixGraph(Graph):
     def adjacent(self, vertice1, vertice2):
         idx1 = self._vertices.index(vertice1)
         idx2 = self._vertices.index(vertice2)
-        return self._matrix[idx1,idx2] or self._matrix[idx2,idx1]
+        return self._matrix[idx1,idx2]
 
     def neighbors(self, vertice):
         idx = self._vertices.index(vertice)
@@ -434,8 +423,6 @@ class AdjacencyMatrixGraph(Graph):
         for i in range(self._n_vertices):
             neig = self._vertices[i]
             if self._matrix[idx,i] and (neig not in neighbors):
-                neighbors.append(neig)
-            if self._matrix[i, idx] and (neig not in neighbors):
                 neighbors.append(neig)
         return neighbors
 
