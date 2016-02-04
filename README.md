@@ -16,6 +16,9 @@ Currently available:
   - LIFO with double linked list
 * Graph
   - Adjacency list
+  - Adjacency matrix
+* Tree
+  - 
 
 ### Installation
 ```
