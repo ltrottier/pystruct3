@@ -37,8 +37,175 @@ class Tree(object):
 class Heap(Tree):
     """A heap is a tree that satisfies the heap property.
     """
-    def __init__(self):
+    def __init__(self, compare):
         Tree.__init__(self)
+        self._vertices = []
+        self._n_vertices = 0
+        self._compare = compare
+
+    def push(self, vertice):
+        """Insert a vertice in the heap.
+
+        Args:
+            vertice (object): The vertice to insert.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            Nothing.
+        """
+        pass
+
+    def clear(self):
+        """Remove all vertices from the heap.
+
+        Args:
+            Nothing.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            Nothing.
+        """
+        self._vertices.clear()
+        self._n_vertices = 0
+
+    def peek(self):
+        """Inspect the root of the heap.
+
+        Args:
+            Nothing.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            ValueError: An error occurs when the heap is empty.
+        """
+        pass
+
+    def pop(self):
+        """Extract the root of the heap and return it.
+
+        Args:
+            Nothing.
+
+        Returns:
+            object: Vertice at the root.
+
+        Raises:
+            ValueError: An error occurs when the heap is empty.
+        """
+        pass
+
+    def replace(self, vertice):
+        """Pop the root then push a vertice.
+
+        This is more efficient than pop followed by push because only
+        one balancing is done instead of two.
+
+        Args:
+            vertice (object): The vertice to insert.
+
+        Returns:
+            object: Vertice at the root.
+
+        Raises:
+            ValueError: An error occurs when the heap is empty.
+        """
+        pass
+
+    def heapify(self, elements):
+        """Create a heap out of elements.
+
+        Args:
+            elements (python list (object)): A list containing elements
+                                             to form the heap.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            ValueError: An error occurs when elements is not a list.
+        """
+        pass
+
+    def is_empty(self):
+        """Verify if the heap contains vertices.
+
+        Does not modify the heap.
+
+        Args:
+            Nothing.
+
+        Returns:
+            bool: True if the heap contains no vertices, False otherwise.
+
+        Raises:
+            Nothing.
+        """
+        return self._n_vertices == 0
+
+    def size(self):
+        """Get the number of vertices in the heap.
+
+        Does not modify the heap.
+
+        Args:
+            Nothing.
+
+        Returns:
+            int: The number of vertices.
+
+        Raises:
+            Nothing.
+        """
+        return self._n_vertices
+
+    def contains(self, vertice):
+        """Verify if a vertice is in the heap.
+
+        Args:
+            vertice (object): The queried vertice.
+
+        Returns:
+            bool: True if the vertice is in the heap, False otherwise.
+
+        Raises:
+            Nothing.
+        """
+        return vertice in self._vertices
+
+    def merge(self, other_heap):
+        """Join other_heap to the current one.
+
+        Args:
+            other_heap (Heap): The heap to join.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            Nothing
+        """
+        pass
+
+    def __contains__(self, vertice):
+        return self.contains(vertice)
+
+    def __len__(self):
+        return self._n_vertices
+
+    def __repr__(self):
+        pass
+
+    def __add__(self, other_heap):
+        new_heap = self.__class__()
+        new_heap.merge(self)
+        new_heap.merge(other_heap)
+        return new_heap
 
 
 class AVLTree(Tree):
