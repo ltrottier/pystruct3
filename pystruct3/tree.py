@@ -37,11 +37,15 @@ class Tree(object):
 class Heap(Tree):
     """A heap is a tree that satisfies the heap property.
     """
-    def __init__(self, compare):
+    def __init__(self, compare=None):
         Tree.__init__(self)
-        self._vertices = []
+        self._vertices = [None]
+        self._capacity = 1
         self._n_vertices = 0
-        self._compare = compare
+        if compare is None:
+            self._compare = lambda x1,x2 : x1 >= x2
+        else:
+            self._compare = compare
 
     def push(self, vertice):
         """Insert a vertice in the heap.
@@ -55,7 +59,35 @@ class Heap(Tree):
         Raises:
             Nothing.
         """
-        pass
+        if self._capacity == self._n_vertices + 1:
+            self._augment_capacity(2*len(self._vertices) + 1)
+        self._vertices[self._n_vertices + 1] = vertice
+        self._shift_up(self._n_vertices + 1)
+        self._n_vertices = self._n_vertices + 1
+
+    def _augment_capacity(self, new_capacity):
+        increment = new_capacity - self._capacity
+        self._capacity = new_capacity
+        self._vertices.extend([None for _ in range(increment)])
+
+    def _shift_up(self, start_index):
+        index = start_index
+        if index == 1:
+            return
+        parent = index // 2
+        heap_condition = self._compare(self._vertices[parent],
+                                       self._vertices[index])
+        while not heap_condition:
+            self._vertices[index], self._vertices[parent] = (
+               self._vertices[parent], self._vertices[index])
+
+            index = parent
+            if index == 1:
+                return
+            parent = index // 2
+            heap_condition = self._compare(self._vertices[parent],
+                                           self._vertices[index])
+
 
     def clear(self):
         """Remove all vertices from the heap.
@@ -199,7 +231,14 @@ class Heap(Tree):
         return self._n_vertices
 
     def __repr__(self):
-        pass
+        items = ['[']
+        for i in range(1, self._n_vertices + 1):
+            items.append(str(self._vertices[i]))
+            items.append(', ')
+        if self.size() != 0:
+            items.pop()
+        items.append(']')
+        return ''.join(items)
 
     def __add__(self, other_heap):
         new_heap = self.__class__()
