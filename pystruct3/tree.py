@@ -59,18 +59,89 @@ class Heap(Tree):
         Raises:
             Nothing.
         """
-        if self._capacity == self._n_vertices + 1:
-            self._augment_capacity(2*len(self._vertices) + 1)
+        self._augment_capacity_if_needed()
         self._vertices[self._n_vertices + 1] = vertice
         self._shift_up(self._n_vertices + 1)
         self._n_vertices = self._n_vertices + 1
 
-    def _augment_capacity(self, new_capacity):
-        increment = new_capacity - self._capacity
-        self._capacity = new_capacity
-        self._vertices.extend([None for _ in range(increment)])
+    def clear(self):
+        """Remove all vertices from the heap.
+
+        Args:
+            Nothing.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            Nothing.
+        """
+        self._vertices.clear()
+        self._vertices = [None]
+        self._n_vertices = 0
+        self._capacity = 1
+
+    def peek(self):
+        """Inspect the root of the heap.
+
+        Args:
+            Nothing.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            ValueError: An error occurs when the heap is empty.
+        """
+        if self._n_vertices == 0:
+            raise ValueError('The heap is empty.')
+        return self._vertices[1]
+
+    def pop(self):
+        """Extract the root of the heap and return it.
+
+        Args:
+            Nothing.
+
+        Returns:
+            object: Vertice at the root.
+
+        Raises:
+            ValueError: An error occurs when the heap is empty.
+        """
+        if self._n_vertices == 0:
+            raise ValueError('The heap is empty.')
+        root = self._vertices[1]
+        self._vertices[1], self._vertices[self._n_vertices] = (
+            self._vertices[self._n_vertices], self._vertices[1])
+
+        self._n_vertices = self._n_vertices - 1
+        self._shift_down(1)
+        self._reduce_capacity_if_needed()
+
+        return root
+
+    def _augment_capacity_if_needed(self):
+        """Increase the size of the internal container.
+        """
+        if self._capacity == self._n_vertices + 1:
+            new_capacity = 2*self._capacity + 1
+            increment = new_capacity - self._capacity
+            self._capacity = new_capacity
+            self._vertices.extend([None for _ in range(increment)])
+
+    def _reduce_capacity_if_needed(self):
+        """Reduce the size of the internal container.
+        """
+        if self._n_vertices + 1 <= self._capacity // 2:
+            self._capacity = self._capacity // 2
+            self._vertices = self._vertices[:self._capacity]
 
     def _shift_up(self, start_index):
+        """Shift up a vertice at a start_index until the heap property is
+           satisfied. The index is with respect to the internal vertices
+           array.
+        """
         index = start_index
         if index == 1:
             return
@@ -87,50 +158,39 @@ class Heap(Tree):
             parent = index // 2
             heap_condition = self._compare(self._vertices[parent],
                                            self._vertices[index])
-
-
-    def clear(self):
-        """Remove all vertices from the heap.
-
-        Args:
-            Nothing.
-
-        Returns:
-            Nothing.
-
-        Raises:
-            Nothing.
+    def _shift_down(self, start_index):
+        """Shift down a vertice at a start_index until the heap property is
+           satisfied. The index is with respect to the internal vertices
+           array.
         """
-        self._vertices.clear()
-        self._n_vertices = 0
+        index = start_index
+        swap_index = index
+        left_index = 2*index
+        right_index = 2*index + 1
 
-    def peek(self):
-        """Inspect the root of the heap.
+        not_finished = True
+        while not_finished:
+            if left_index <= self._n_vertices:
+                swap_index = left_index
 
-        Args:
-            Nothing.
+                if ( (right_index <= self._n_vertices) and
+                     (not self._compare(self._vertices[left_index],
+                                       self._vertices[right_index])) ):
+                    swap_index = right_index
 
-        Returns:
-            Nothing.
+            if swap_index == index:
+                not_finished = False
+            else:
+                if self._compare(self._vertices[index],
+                                 self._vertices[swap_index]):
+                    not_finished = False
+                else:
+                    self._vertices[index], self._vertices[swap_index] = (
+                    self._vertices[swap_index], self._vertices[index])
 
-        Raises:
-            ValueError: An error occurs when the heap is empty.
-        """
-        pass
-
-    def pop(self):
-        """Extract the root of the heap and return it.
-
-        Args:
-            Nothing.
-
-        Returns:
-            object: Vertice at the root.
-
-        Raises:
-            ValueError: An error occurs when the heap is empty.
-        """
-        pass
+            index = swap_index
+            left_index = 2*index
+            right_index = 2*index + 1
 
     def replace(self, vertice):
         """Pop the root then push a vertice.
