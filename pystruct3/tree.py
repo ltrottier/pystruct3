@@ -192,6 +192,20 @@ class Heap(Tree):
             left_index = 2*index
             right_index = 2*index + 1
 
+    def _is_heap(self):
+        for i in range(self._n_vertices):
+            index = i + 1
+            left_index = 2*index
+            right_index = 2*index + 1
+
+            if left_index <= self._n_vertices:
+                if not self._compare(self._vertices[index], self._vertices[left_index]):
+                    return False
+            if right_index <= self._n_vertices:
+                if not self._compare(self._vertices[index], self._vertices[right_index]):
+                    return False
+        return True
+
     def replace(self, vertice):
         """Pop the root then push a vertice.
 
