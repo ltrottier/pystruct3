@@ -24,6 +24,7 @@
 # SOFTWARE.
 
 
+import random
 import unittest
 
 class TestTreeMethods(unittest.TestCase):
@@ -32,23 +33,26 @@ class TestTreeMethods(unittest.TestCase):
         self.empty_tree = Tree()
 
         self.unit_tree = Tree()
-        self.unit_tree.insert(2)
+        self.unit_tree.push(2)
 
         self.some_tree = Tree()
         self.some_tree.push(4)
         self.some_tree.push(5)
         self.some_tree.push(2)
 
+    def test_push_pop_ok(self):
+        a = Tree()
+        for i in range(1000):
+            for j in range(50):
+                a.push(random.randint(1,100))
+                self.assertTrue(a._is_heap())
+            for j in range(50):
+                a.pop()
+                self.assertTrue(a._is_heap())
+
+            self.assertTrue(a.is_empty())
+
 
 if __name__ == '__main__':
     from pystruct3.tree import Heap as Tree
     unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestTreeMethods))
-
-    a = Tree()
-    a.push(4)
-    a.push(2)
-    a.push(6)
-    a.push(8)
-    a.push(1)
-    a.push(2)
-    # a.push(3)
